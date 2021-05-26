@@ -39,21 +39,8 @@ public class TransactionsController implements Initializable {
     public TableColumn<Transaction, Integer> tabReceiverID;
     public TableColumn<Transaction, Integer> tabMoney;
 
-    private BankDatabase database;
-
-    public void setDatabase(BankDatabase database) {
-        this.database = database;
-    }
-
-    public BankDatabase getDatabase() {
-        return this.database;
-    }
-
     public void switchToMainScene(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("MenuScene.fxml"));
-        root = loader.load();
-        MenuController controller = loader.getController();
-        controller.setDatabase(this.database);
+        root = new FXMLLoader(getClass().getResource("MenuScene.fxml")).load();
         stage = (Stage)((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
@@ -65,12 +52,14 @@ public class TransactionsController implements Initializable {
         tabSenderID.setCellValueFactory(new PropertyValueFactory<Transaction, Integer>("senderID"));
         tabReceiverID.setCellValueFactory(new PropertyValueFactory<Transaction, Integer>("receiverID"));
         tabMoney.setCellValueFactory(new PropertyValueFactory<Transaction, Integer>("money"));
+        table.getItems().addAll(Main.getDatabase().getTransactions());
     }
 
     public void handleDataReset() {
         senderIDTextField.setText("");
         receiverIDTextField.setText("");
         moneyTextField.setText("");
+        infoText.setText("");
     }
 
     private Transaction prepareTransaction() throws BadDataFormatException{
@@ -78,7 +67,7 @@ public class TransactionsController implements Initializable {
         newTransaction.setSenderID(senderIDTextField.getText());
         newTransaction.setReceiverID(receiverIDTextField.getText());
         newTransaction.setMoney(moneyTextField.getText());
-        newTransaction.setId(database.getLastFreeTransactionID() + 1);
+        newTransaction.setId(Main.getDatabase().getLastFreeTransactionID() + 1);
         return newTransaction;
     }
 
@@ -86,10 +75,9 @@ public class TransactionsController implements Initializable {
         try {
             Transaction newTransaction = prepareTransaction();
             transferMoney(newTransaction.getReceiverID(), newTransaction.getSenderID(), newTransaction.getMoney());
-            database.addNewTransaction(newTransaction);
-            BankIOHandler.saveTransactionsToFile(new File("transactions.txt"), database.getTransactions());
+            Main.getDatabase().addNewTransaction(newTransaction);
             table.getItems().clear();
-            table.getItems().addAll(database.getTransactions());
+            table.getItems().addAll(Main.getDatabase().getTransactions());
             handleDataReset();
         } catch (BadDataFormatException e) {
             System.out.println(e.getMessage());
@@ -99,8 +87,6 @@ public class TransactionsController implements Initializable {
             infoText.setText("Nie ma takiego użytkownika jak " + e.getUserID());
         } catch (NotEnoughMoneyException e) {
             infoText.setText("Brak wystarczających środków na koncie " + e.getUserID());
-        } catch (IOException e) {
-            infoText.setText("Bład operacji zapisu do bazy danych");
         }
     }
 
@@ -108,13 +94,13 @@ public class TransactionsController implements Initializable {
 
         System.out.println(receiverID + " " + senderID + " " + money);
         Predicate<UserAccount> bySenderID = userAccount -> (userAccount.getId() == senderID);
-        List<UserAccount> senderList = database.getUsers().stream().filter(bySenderID).collect(Collectors.toList());
+        List<UserAccount> senderList = Main.getDatabase().getUsers().stream().filter(bySenderID).collect(Collectors.toList());
         if (senderList.isEmpty()) {
             throw new NoSuchUserException("Error while - transferring money, there is no such user as sender", senderID);
         }
 
         Predicate<UserAccount> byReceiverID = userAccount -> (userAccount.getId() == receiverID);
-        List<UserAccount> receiverList = database.getUsers().stream().filter(byReceiverID).collect(Collectors.toList());
+        List<UserAccount> receiverList = Main.getDatabase().getUsers().stream().filter(byReceiverID).collect(Collectors.toList());
         if (receiverList.isEmpty()) {
             throw new NoSuchUserException("Error while - transferring money, there is no such user as receiver", receiverID);
         }

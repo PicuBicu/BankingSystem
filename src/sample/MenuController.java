@@ -14,45 +14,24 @@ public class MenuController {
     private Stage stage;
     private Scene scene;
     private Parent root;
-    private BankDatabase database = new BankDatabase();
-
-    public void setDatabase(BankDatabase database) {
-        this.database = database;
-    }
-
-    public BankDatabase getDatabase() {
-        return this.database;
-    }
 
     public void switchToRegistrationScene(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("RegistrationScene.fxml"));
-        root = loader.load();
-        RegistrationController controller = loader.getController();
-        controller.setDatabase(this.database);
+        root = new FXMLLoader(getClass().getResource("RegistrationScene.fxml")).load();
         switchToScene(event);
     }
 
     public void switchToDeleteUserScene(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("DeleteUserScene.fxml"));
-        root = loader.load();
-        DeleteUserController controller = loader.getController();
-        controller.setDatabase(this.database);
+        root = new FXMLLoader(getClass().getResource("DeleteUserScene.fxml")).load();
         switchToScene(event);
     }
 
     public void switchToTransactionsScene(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("TransactionsScene.fxml"));
-        root = loader.load();
-        TransactionsController controller = loader.getController();
-        controller.setDatabase(this.database);
+        root = new FXMLLoader(getClass().getResource("TransactionsScene.fxml")).load();
         switchToScene(event);
     }
 
     public void switchToUserAccountsScene(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("DataDisplayScene.fxml"));
-        root = loader.load();
-        DataDisplayController controller = loader.getController();
-        controller.setDatabase(this.database);
+        root = new FXMLLoader(getClass().getResource("DataDisplayScene.fxml")).load();
         switchToScene(event);
     }
 

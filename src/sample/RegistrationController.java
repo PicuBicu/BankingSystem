@@ -30,30 +30,14 @@ public class RegistrationController {
     public TextField houseNumbersTextField;
     public TextField moneyTextField;
 
-    private BankDatabase database;
-
-    public void setDatabase(BankDatabase database) {
-        this.database = database;
-    }
-
-    public BankDatabase getDatabase() {
-        return this.database;
-    }
-
     public void getData(ActionEvent event) {
         try {
             UserAccount newAccount = prepareFullUserData();
             resetData(event);
-            database.addNewUser(newAccount);
-            BankIOHandler.saveUsersToFile(new File("users.txt"), database.getUsers());
+            Main.getDatabase().addNewUser(newAccount);
             infoText.setText("Dodano nowe konto");
         } catch (BadDataFormatException e) {
             infoText.setText("Wprowadz poprawne dane");
-        } catch (FileNotFoundException e) {
-            infoText.setText("Nie udało się uruchomic bazy danych");
-        } catch (IOException e) {
-            infoText.setText("Bład zapisu użytkownika do bazy danych");
-            e.printStackTrace();
         }
     }
 
@@ -69,10 +53,7 @@ public class RegistrationController {
     }
 
     public void switchToMainScene(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("MenuScene.fxml"));
-        root = loader.load();
-        MenuController controller = loader.getController();
-        controller.setDatabase(this.database);
+        root = new FXMLLoader(getClass().getResource("MenuScene.fxml")).load();
         stage = (Stage)((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
@@ -89,7 +70,7 @@ public class RegistrationController {
         newAddress.setStreet(streetTextField.getText());
         newAddress.setHouseNumbers(houseNumbersTextField.getText());
         newAccount.setAddress(newAddress);
-        newAccount.setId(Integer.toString(database.getLastFreeUserID() + 1));
+        newAccount.setId(Integer.toString(Main.getDatabase().getLastFreeUserID() + 1));
         return newAccount;
     }
 }

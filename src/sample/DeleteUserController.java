@@ -37,21 +37,8 @@ public class DeleteUserController implements Initializable {
     public TableColumn<UserAccount, String> tabAddress;
     public TableColumn<UserAccount, Integer> tabMoney;
 
-    private BankDatabase database = new BankDatabase();
-
-    public void setDatabase(BankDatabase database) {
-        this.database = database;
-    }
-
-    public BankDatabase getDatabase() {
-        return this.database;
-    }
-
     public void switchToMainScene(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("MenuScene.fxml"));
-        root = loader.load();
-        MenuController controller = loader.getController();
-        controller.setDatabase(this.database);
+        root = new FXMLLoader(getClass().getResource("MenuScene.fxml")).load();
         stage = (Stage)((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
@@ -61,10 +48,10 @@ public class DeleteUserController implements Initializable {
         try {
             int id = Integer.parseInt(userIdTextField.getText());
             Predicate<UserAccount> byID = userAccount -> userAccount.getId() == id;
-            if (database.getUsers().stream().filter(byID).count() == 0 || id == 0) {
+            if (Main.getDatabase().getUsers().stream().filter(byID).count() == 0 || id == 0) {
                 throw new NoSuchUserException("Error - there is no such user with given ID");
             }
-            database.getUsers().removeIf(byID);
+            Main.getDatabase().getUsers().removeIf(byID);
             return id;
         } catch (NumberFormatException e) {
             throw new BadDataFormatException("Error while - converting ID string to ID int");
@@ -79,16 +66,13 @@ public class DeleteUserController implements Initializable {
         try {
             int id = deleteUserById();
             infoText.setText("Usunięto użytkownika o id" + id);
-            BankIOHandler.saveUsersToFile(new File("users.txt"), database.getUsers());
             table.getItems().clear();
-            table.getItems().addAll(database.getUsers());
+            table.getItems().addAll(Main.getDatabase().getUsers());
             handleResetData();
         } catch (BadDataFormatException e) {
             infoText.setText("Podaj liczbe całkowitą w ID użytkownika");
         } catch (NoSuchUserException e) {
             infoText.setText("Nie ma podanego użytkownika");
-        } catch (IOException e) {
-            infoText.setText("Błąd bazy danych");
         }
     }
 
@@ -101,6 +85,7 @@ public class DeleteUserController implements Initializable {
         tabPESEL.setCellValueFactory(new PropertyValueFactory<UserAccount, String>("PESEL"));
         tabAddress.setCellValueFactory(new PropertyValueFactory<UserAccount, String>("address"));
         tabMoney.setCellValueFactory(new PropertyValueFactory<UserAccount, Integer>("money"));
+        table.getItems().addAll(Main.getDatabase().getUsers());
     }
 
 }

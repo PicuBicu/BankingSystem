@@ -1,11 +1,13 @@
 package sample;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.EOFException;
 import java.io.File;
@@ -14,16 +16,28 @@ import java.util.ArrayList;
 
 public class Main extends Application {
 
+    private static BankDatabase database;
+
+    public static BankDatabase getDatabase() {
+        return database;
+    }
+
     @Override
     public void start(Stage primaryStage) {
         try {
-            BankDatabase database = prepareDatabase();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("MenuScene.fxml"));
-            Parent root = loader.load();
-            MenuController controller = loader.getController();
-            controller.setDatabase(database);
+            Main.database = prepareDatabase();
+            Parent root = new FXMLLoader(getClass().getResource("MenuScene.fxml")).load();
             primaryStage.setTitle("System bankowy");
             primaryStage.getIcons().add(new Image("sample/bank.png"));
+            primaryStage.setOnCloseRequest(windowEvent -> {
+                try {
+                    System.out.println("XD");
+                    BankIOHandler.saveTransactionsToFile(new File("transactions.txt"), Main.getDatabase().getTransactions());
+                    BankIOHandler.saveUsersToFile(new File("users.txt"), Main.getDatabase().getUsers());
+                } catch (IOException e) {
+                    System.exit(-1);
+                }
+            });
             primaryStage.setScene(new Scene(root));
             primaryStage.show();
         } catch (IOException e) {

@@ -38,22 +38,10 @@ public class DataDisplayController implements Initializable {
     public TableColumn<UserAccount, String> tabAddress;
     public TableColumn<UserAccount, Integer> tabMoney;
 
-    private BankDatabase database = new BankDatabase();
     private final String[] filters = {"imie", "nazwisko", "PESEL", "adres"};
 
-    public void setDatabase(BankDatabase database) {
-        this.database = database;
-    }
-
-    public BankDatabase getDatabase() {
-        return this.database;
-    }
-
     public void switchToMainScene(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("MenuScene.fxml"));
-        root = loader.load();
-        MenuController controller = loader.getController();
-        controller.setDatabase(database);
+        root = new FXMLLoader(getClass().getResource("MenuScene.fxml")).load();
         stage = (Stage)((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
@@ -81,7 +69,7 @@ public class DataDisplayController implements Initializable {
                     case "nazwisko" -> filterByLastName(searchedWord);
                     case "PESEL" -> filterByPESEL(searchedWord);
                     case "adres" -> filterByAddress(searchedWord);
-                    default ->  database.getUsers();
+                    default ->  Main.getDatabase().getUsers();
                 };
                 table.getItems().clear();
                 table.getItems().addAll(filteredList);
@@ -97,7 +85,7 @@ public class DataDisplayController implements Initializable {
     private List<UserAccount> filterFirstByName(String firstName) throws NoSuchUserException {
 
         Predicate<UserAccount> byFirstName = userAccount -> userAccount.getFirstName().contains(firstName);
-        List<UserAccount> filteredList = database.getUsers().stream().filter(byFirstName).collect(Collectors.toList());
+        List<UserAccount> filteredList = Main.getDatabase().getUsers().stream().filter(byFirstName).collect(Collectors.toList());
         if (filteredList.isEmpty()) {
             throw new NoSuchUserException("Error while - filtering users table by first name");
         }
@@ -106,7 +94,7 @@ public class DataDisplayController implements Initializable {
 
     private List<UserAccount> filterByLastName(String lastName) throws NoSuchUserException {
         Predicate<UserAccount> byLastName = userAccount -> userAccount.getLastName().contains(lastName);
-        List<UserAccount> filteredList = database.getUsers().stream().filter(byLastName).collect(Collectors.toList());
+        List<UserAccount> filteredList = Main.getDatabase().getUsers().stream().filter(byLastName).collect(Collectors.toList());
         if (filteredList.isEmpty()) {
             throw new NoSuchUserException("Error while - filtering users table by last name");
         }
@@ -115,7 +103,7 @@ public class DataDisplayController implements Initializable {
 
     private List<UserAccount> filterByPESEL(String PESEL) throws NoSuchUserException {
         Predicate<UserAccount> byPESEL = userAccount -> userAccount.getPESEL().contains(PESEL);
-        List<UserAccount> filteredList = database.getUsers().stream().filter(byPESEL).collect(Collectors.toList());
+        List<UserAccount> filteredList = Main.getDatabase().getUsers().stream().filter(byPESEL).collect(Collectors.toList());
         if (filteredList.isEmpty()) {
             throw new NoSuchUserException("Error while - filtering users table by PESEL");
         }
@@ -124,7 +112,7 @@ public class DataDisplayController implements Initializable {
 
     private List<UserAccount> filterByAddress(String address) throws NoSuchUserException {
         Predicate<UserAccount> byAddress = userAccount -> userAccount.getAddress().toString().contains(address);
-        List<UserAccount> filteredList = database.getUsers().stream().filter(byAddress).collect(Collectors.toList());
+        List<UserAccount> filteredList = Main.getDatabase().getUsers().stream().filter(byAddress).collect(Collectors.toList());
         if (filteredList.isEmpty()) {
             throw new NoSuchUserException("Error while - filtering users table by address");
         }
