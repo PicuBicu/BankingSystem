@@ -11,9 +11,34 @@ import java.io.IOException;
 
 public abstract class Controller {
 
-    protected Stage stage;
-    protected Scene scene;
-    protected Parent root;
+    private Stage stage;
+    private Scene scene;
+    private Parent root;
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    public Scene getScene() {
+        return scene;
+    }
+
+    public void setScene(Scene scene) {
+        this.scene = scene;
+    }
+
+    public Parent getRoot() {
+        return root;
+    }
+
+    public void setRoot(Parent root) {
+        this.root = root;
+    }
+
 
     public void switchToMainScene(ActionEvent event) throws IOException {
         root = new FXMLLoader(getClass().getResource("MenuScene.fxml")).load();

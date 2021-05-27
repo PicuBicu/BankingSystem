@@ -33,12 +33,12 @@ public class DataDisplayController extends Controller implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         filterChoiceBox.getItems().addAll(filters);
-        tabID.setCellValueFactory(new PropertyValueFactory<UserAccount, Integer>("id"));
-        tabFirstName.setCellValueFactory(new PropertyValueFactory<UserAccount, String>("firstName"));
-        tabLastName.setCellValueFactory(new PropertyValueFactory<UserAccount, String>("lastName"));
-        tabPESEL.setCellValueFactory(new PropertyValueFactory<UserAccount, String>("PESEL"));
-        tabAddress.setCellValueFactory(new PropertyValueFactory<UserAccount, String>("address"));
-        tabMoney.setCellValueFactory(new PropertyValueFactory<UserAccount, Integer>("money"));
+        tabID.setCellValueFactory(new PropertyValueFactory<>("id"));
+        tabFirstName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        tabLastName.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        tabPESEL.setCellValueFactory(new PropertyValueFactory<>("PESEL"));
+        tabAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+        tabMoney.setCellValueFactory(new PropertyValueFactory<>("money"));
     }
 
     public void handleFiltering() {
@@ -93,7 +93,7 @@ public class DataDisplayController extends Controller implements Initializable {
     }
 
     private List<UserAccount> filterByAddress(String address) throws NoSuchUserException {
-        Predicate<UserAccount> byAddress = userAccount -> userAccount.getAddress().toString().contains(address);
+        Predicate<UserAccount> byAddress = userAccount -> userAccount.getAddress().contains(address);
         List<UserAccount> filteredList = Main.getDatabase().getUsers().stream().filter(byAddress).collect(Collectors.toList());
         if (filteredList.isEmpty()) {
             throw new NoSuchUserException("Error while - filtering users table by address");

@@ -5,6 +5,7 @@ public class NoSuchUserException extends Exception{
 
     public NoSuchUserException(String message, int userID) {
         super(message);
+        this.userID = userID;
     }
 
     public NoSuchUserException(String message) {

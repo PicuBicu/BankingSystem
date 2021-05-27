@@ -4,8 +4,8 @@ public class NotEnoughMoneyException extends Exception {
 
     private int userID;
 
-    public NotEnoughMoneyException(String s, int userID) {
-        super(s);
+    public NotEnoughMoneyException(String message, int userID) {
+        super(message);
         this.userID = userID;
     }
     public int getUserID() {

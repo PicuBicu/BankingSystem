@@ -29,10 +29,10 @@ public class TransactionsController extends Controller implements Initializable 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        tabID.setCellValueFactory(new PropertyValueFactory<Transaction, Integer>("id"));
-        tabSenderID.setCellValueFactory(new PropertyValueFactory<Transaction, Integer>("senderID"));
-        tabReceiverID.setCellValueFactory(new PropertyValueFactory<Transaction, Integer>("receiverID"));
-        tabMoney.setCellValueFactory(new PropertyValueFactory<Transaction, Integer>("money"));
+        tabID.setCellValueFactory(new PropertyValueFactory<>("id"));
+        tabSenderID.setCellValueFactory(new PropertyValueFactory<>("senderID"));
+        tabReceiverID.setCellValueFactory(new PropertyValueFactory<>("receiverID"));
+        tabMoney.setCellValueFactory(new PropertyValueFactory<>("money"));
         table.getItems().addAll(Main.getDatabase().getTransactions());
     }
 

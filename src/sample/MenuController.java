@@ -11,29 +11,29 @@ import java.io.IOException;
 public class MenuController extends Controller {
 
     public void switchToRegistrationScene(ActionEvent event) throws IOException {
-        root = new FXMLLoader(getClass().getResource("RegistrationScene.fxml")).load();
+        setRoot(new FXMLLoader(getClass().getResource("RegistrationScene.fxml")).load());
         switchToScene(event);
     }
 
     public void switchToDeleteUserScene(ActionEvent event) throws IOException {
-        root = new FXMLLoader(getClass().getResource("DeleteUserScene.fxml")).load();
+        setRoot(new FXMLLoader(getClass().getResource("DeleteUserScene.fxml")).load());
         switchToScene(event);
     }
 
     public void switchToTransactionsScene(ActionEvent event) throws IOException {
-        root = new FXMLLoader(getClass().getResource("TransactionsScene.fxml")).load();
+        setRoot(new FXMLLoader(getClass().getResource("TransactionsScene.fxml")).load());
         switchToScene(event);
     }
 
     public void switchToUserAccountsScene(ActionEvent event) throws IOException {
-        root = new FXMLLoader(getClass().getResource("DataDisplayScene.fxml")).load();
+        setRoot(new FXMLLoader(getClass().getResource("DataDisplayScene.fxml")).load());
         switchToScene(event);
     }
 
     private void switchToScene(ActionEvent event) {
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
+        setStage((Stage)((Node)event.getSource()).getScene().getWindow());
+        setScene(new Scene(getRoot()));
+        getStage().setScene(getScene());
     }
 
     @Override
