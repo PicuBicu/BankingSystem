@@ -3,17 +3,12 @@ package sample;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class MenuController {
-
-    private Stage stage;
-    private Scene scene;
-    private Parent root;
+public class MenuController extends Controller {
 
     public void switchToRegistrationScene(ActionEvent event) throws IOException {
         root = new FXMLLoader(getClass().getResource("RegistrationScene.fxml")).load();
@@ -41,5 +36,6 @@ public class MenuController {
         stage.setScene(scene);
     }
 
-
+    @Override
+    public void switchToMainScene(ActionEvent event) throws IOException {}
 }

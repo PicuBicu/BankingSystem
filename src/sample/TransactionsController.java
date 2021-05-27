@@ -1,32 +1,20 @@
 package sample;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class TransactionsController implements Initializable {
-
-    private Stage stage;
-    private Scene scene;
-    private Parent root;
+public class TransactionsController extends Controller implements Initializable {
 
     @FXML
     public TextField receiverIDTextField;
@@ -38,13 +26,6 @@ public class TransactionsController implements Initializable {
     public TableColumn<Transaction, Integer> tabSenderID;
     public TableColumn<Transaction, Integer> tabReceiverID;
     public TableColumn<Transaction, Integer> tabMoney;
-
-    public void switchToMainScene(ActionEvent event) throws IOException {
-        root = new FXMLLoader(getClass().getResource("MenuScene.fxml")).load();
-        stage = (Stage)((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

@@ -1,47 +1,25 @@
 package sample;
 
+import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 public abstract class Controller {
 
-    private Stage stage;
-    private Scene scene;
-    private Parent root;
+    protected Stage stage;
+    protected Scene scene;
+    protected Parent root;
 
-    private BankDatabase database = new BankDatabase();
-
-    public Stage getStage() {
-        return stage;
-    }
-
-    public Scene getScene() {
-        return scene;
-    }
-
-    public Parent getRoot() {
-        return root;
-    }
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
-
-    public void setScene(Scene scene) {
-        this.scene = scene;
-    }
-
-    public void setRoot(Parent root) {
-        this.root = root;
-    }
-
-    public void setDatabase(BankDatabase database) {
-        this.database = database;
-    }
-
-    public BankDatabase getDatabase() {
-        return this.database;
+    public void switchToMainScene(ActionEvent event) throws IOException {
+        root = new FXMLLoader(getClass().getResource("MenuScene.fxml")).load();
+        stage = (Stage)((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
     }
 
 }

@@ -1,29 +1,18 @@
 package sample;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class DataDisplayController implements Initializable {
-
-    private Stage stage;
-    private Scene scene;
-    private Parent root;
+public class DataDisplayController extends Controller implements Initializable {
 
     @FXML
     public TextField inputTextField;
@@ -39,13 +28,6 @@ public class DataDisplayController implements Initializable {
     public TableColumn<UserAccount, Integer> tabMoney;
 
     private final String[] filters = {"imie", "nazwisko", "PESEL", "adres"};
-
-    public void switchToMainScene(ActionEvent event) throws IOException {
-        root = new FXMLLoader(getClass().getResource("MenuScene.fxml")).load();
-        stage = (Stage)((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

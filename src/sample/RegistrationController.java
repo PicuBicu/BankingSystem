@@ -2,23 +2,10 @@ package sample;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
-public class RegistrationController {
-
-    private Stage stage;
-    private Scene scene;
-    private Parent root;
+public class RegistrationController extends Controller{
 
     @FXML
     public Text infoText;
@@ -50,13 +37,6 @@ public class RegistrationController {
         streetTextField.setText("");
         houseNumbersTextField.setText("");
         moneyTextField.setText("");
-    }
-
-    public void switchToMainScene(ActionEvent event) throws IOException {
-        root = new FXMLLoader(getClass().getResource("MenuScene.fxml")).load();
-        stage = (Stage)((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
     }
 
     private UserAccount prepareFullUserData() throws BadDataFormatException {
